@@ -15,7 +15,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/clients")
-@Transactional
 public class ClientController {
 
     @Autowired
@@ -56,6 +55,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Map<String, String>> deleteClientById(@PathVariable Long id) {
         clientService.deleteClientById(id);
         Map<String, String> message = new HashMap<>();

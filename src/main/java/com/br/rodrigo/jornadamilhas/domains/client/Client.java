@@ -2,6 +2,7 @@ package com.br.rodrigo.jornadamilhas.domains.client;
 
 import com.br.rodrigo.jornadamilhas.domains.address.Address;
 import com.br.rodrigo.jornadamilhas.domains.comments.Comment;
+import com.br.rodrigo.jornadamilhas.domains.destination.Destination;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,11 @@ public class Client {
     private List<Comment> comments = new ArrayList<>();
     @Embedded
     private Address address;
+    @ManyToMany()
+    @JoinTable(name = "clients-destinations",
+            joinColumns = {@JoinColumn(name = "client_id")},
+            inverseJoinColumns = {@JoinColumn(name = "destination_id")})
+    private List<Destination> destinations = new ArrayList<>();
 
     public Client(ClientDataInput dataInput) {
         this.username = dataInput.username();

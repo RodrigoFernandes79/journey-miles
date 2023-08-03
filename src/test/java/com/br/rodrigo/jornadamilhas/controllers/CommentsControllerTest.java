@@ -184,12 +184,6 @@ class CommentsControllerTest {
         // Arrange
         Long id_client = null;
         Pageable pageable = PageRequest.of(0, 6, Sort.by("username"));
-
-        List<Comment> comments = new ArrayList<>();
-
-        Page<ListClientCommentsOutput> page = new PageImpl<>(comments.stream()
-                .map(ListClientCommentsOutput::new).collect(Collectors.toList()));
-
         when(commentService.findCommentByIdClient(null, pageable)).thenThrow(new DataNotFoundException(
                 "Client Id " + id_client + " not found"));
         //Act
@@ -224,8 +218,8 @@ class CommentsControllerTest {
                         .content(registrationJacksonTester.write(new ClientCommentRegistration(
                                 client_id, comment.getComment())).getJson())
                 )
-                .andReturn().
-                getResponse();
+                .andReturn()
+                .getResponse();
         // Assert
         assertThat(result.getStatus()).isEqualTo(HttpStatus.OK.value());
 

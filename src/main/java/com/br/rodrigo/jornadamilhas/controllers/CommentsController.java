@@ -70,6 +70,7 @@ public class CommentsController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Map<String, String>> deleteComment(
             @PathVariable Long id,
             @RequestBody DeleteCommentInput deleteCommentInput) {
