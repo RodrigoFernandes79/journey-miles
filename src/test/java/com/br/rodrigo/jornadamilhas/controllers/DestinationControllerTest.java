@@ -45,6 +45,8 @@ class DestinationControllerTest {
     @Autowired
     private JacksonTester<DestinationDataInput> destinationDataInputJacksonTester;
     @Autowired
+    private JacksonTester<DestinationDataOutputRegister> destinationDataOutputRegisterJacksonTester;
+    @Autowired
     private JacksonTester<DestinationDataOutput> destinationDataOutputJacksonTester;
     @Autowired
     private JacksonTester<DestinationDataInputUpdate> destinationDataInputUpdateJacksonTester;
@@ -79,7 +81,7 @@ class DestinationControllerTest {
         assertThat(result.getStatus()).isEqualTo(HttpStatus.CREATED.value());
 
         var jsonResponse = result.getContentAsString();
-        var jsonExpected = destinationDataOutputJacksonTester.write(new DestinationDataOutput(destination)).getJson();
+        var jsonExpected = destinationDataOutputRegisterJacksonTester.write(new DestinationDataOutputRegister(destination)).getJson();
         assertThat(jsonResponse).isEqualTo(jsonExpected);
     }
 
@@ -97,10 +99,10 @@ class DestinationControllerTest {
     void listAllDestination_scenario_1() throws Exception {
         //Arrange
         Pageable pageable = PageRequest.of(0, 6, Sort.by("name"));
-        var destination1 = new Destination(1L, null,
-                "Paris", BigDecimal.valueOf(500.00), null);
-        var destination2 = new Destination(2L, null,
-                "Paraguay", BigDecimal.valueOf(350.00), null);
+        var destination1 = new Destination(1L, null, null, "Paris", null,
+                null, BigDecimal.valueOf(500.00), null);
+        var destination2 = new Destination(2L, null, null,
+                "Paraguay", null, null, BigDecimal.valueOf(350.00), null);
         List<Destination> destinationList = Arrays.asList(destination1, destination2);
         Page<Destination> destinationPage = new PageImpl<>(destinationList);
         when(destinationRepository.findAll(pageable))
@@ -189,9 +191,9 @@ class DestinationControllerTest {
         String name = "Paris";
         Pageable pageable = PageRequest.of(0, 6, Sort.by("price"));
         var destination1 = new Destination(1L, null,
-                "Paris", BigDecimal.valueOf(500.00), null);
+                "Paris", null, null, null, BigDecimal.valueOf(500.00), null);
         var destination2 = new Destination(2L, null,
-                "Paraguay", BigDecimal.valueOf(350.00), null);
+                "Paraguay", null, null, null, BigDecimal.valueOf(350.00), null);
         List<Destination> destinationList = Arrays.asList(destination1, destination2);
         Page<Destination> destinationPage = new PageImpl<>(destinationList, pageable, 2L);
         when(destinationRepository.findAllByNameIgnoreCaseContaining(name, pageable))
@@ -239,7 +241,7 @@ class DestinationControllerTest {
         //Arrange
         Long id = 1L;
         DestinationDataInputUpdate dataInputUpdate = new DestinationDataInputUpdate(
-                "paris.jpg", BigDecimal.valueOf(500.00));
+                "paris.jpg", "paris2.jpeg", "Welcome to Paris", null, BigDecimal.valueOf(500.00));
         var destination = new Destination();
         destination.setId(id);
         destination.setName("David");
@@ -247,12 +249,14 @@ class DestinationControllerTest {
         when(destinationRepository.findById(anyLong())).thenReturn(Optional.of(destination));
         when(destinationService.updateDestination(any(), any()))
                 .thenReturn(new DestinationDataOutputUpdate(destination));
+        //Act
         var result = mvc.perform(
                         patch("/destinations/{id}", id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(destinationDataInputUpdateJacksonTester.
                                         write(new DestinationDataInputUpdate(destination.getPhoto(),
-                                                destination.getPrice())).getJson())
+                                                destination.getPhoto2(), destination.getMetaDescription(),
+                                                destination.getTextDescription(), destination.getPrice())).getJson())
                 )
                 .andReturn().getResponse();
         //Asserts

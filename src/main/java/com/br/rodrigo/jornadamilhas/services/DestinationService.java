@@ -14,6 +14,9 @@ public class DestinationService {
     @Autowired
     private DestinationRepository destinationRepository;
 
+    @Autowired
+    private OpenApiService openApiService;
+
     public Destination createDestination(DestinationDataInput destinationDataInput) {
         var verifyDestination = destinationRepository
                 .findByNameIgnoreCase(destinationDataInput.name());
@@ -62,6 +65,12 @@ public class DestinationService {
         var verifyDestination = destinationRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(
                         "Destination " + id + " not found"));
+        if (verifyDestination.getTextDescription() == null
+                && dataInputUpdate.textDescription() == null) {
+
+            verifyDestination
+                    .setTextDescription(openApiService.generateTextDescription(verifyDestination.getName()));
+        }
         verifyDestination.dataUpdateDestination(dataInputUpdate);
 
         return new DestinationDataOutputUpdate(verifyDestination);

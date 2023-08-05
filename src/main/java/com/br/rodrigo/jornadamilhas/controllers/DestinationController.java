@@ -23,14 +23,14 @@ public class DestinationController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DestinationDataOutput> createDestination(
+    public ResponseEntity<DestinationDataOutputRegister> createDestination(
             @Valid @RequestBody DestinationDataInput destinationDataInput,
             UriComponentsBuilder uriComponentsBuilder) {
         var destination = destinationService.createDestination(destinationDataInput);
         var uri = uriComponentsBuilder.path("/destination/{id}")
                 .buildAndExpand(destination.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new DestinationDataOutput(destination));
+        return ResponseEntity.created(uri).body(new DestinationDataOutputRegister(destination));
     }
 
     @GetMapping
@@ -61,7 +61,7 @@ public class DestinationController {
     @PatchMapping("/{id}")
     @Transactional
     public ResponseEntity<DestinationDataOutputUpdate> updateDestination(
-            @PathVariable Long id, @RequestBody DestinationDataInputUpdate destinationDataInput) {
+            @PathVariable Long id, @Valid @RequestBody DestinationDataInputUpdate destinationDataInput) {
         DestinationDataOutputUpdate destination = destinationService.updateDestination(
                 id, destinationDataInput);
 
