@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OpenApiService {
-    private static final String JOURNEY_MILES_KEY = "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";
+    private static final String JOURNEY_MILES_KEY = System.getenv("JOURNEY_MILES_KEY");
 
     public String generateTextDescription(String nameDestination) {
         OpenAiService openAiService = new OpenAiService(JOURNEY_MILES_KEY);
