@@ -5,6 +5,7 @@ import com.br.rodrigo.jornadamilhas.services.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,6 +33,7 @@ public class ClientController {
         return ResponseEntity.created(uri).body(new ClientDataOutput(client));
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public ResponseEntity<List<ListClientDataOutput>> listAllClients() {
         List<ListClientDataOutput> listClientDataOutputs = clientService.listAllClients();
@@ -39,6 +41,7 @@ public class ClientController {
         return ResponseEntity.ok().body(listClientDataOutputs);
     }
 
+    @Secured("ROLE_USER")
     @PatchMapping("/{id}")
     @Transactional
     public ResponseEntity<UpdateClientDataOutput> updateClient(@PathVariable Long id,
@@ -47,6 +50,7 @@ public class ClientController {
         return ResponseEntity.ok().body(new UpdateClientDataOutput(client));
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{id}")
     public ResponseEntity<UpdateClientDataOutput> findClientById(
             @PathVariable Long id) {
@@ -54,6 +58,7 @@ public class ClientController {
         return ResponseEntity.ok().body(new UpdateClientDataOutput(client));
     }
 
+    @Secured("ROLE_USER")
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Map<String, String>> deleteClientById(@PathVariable Long id) {

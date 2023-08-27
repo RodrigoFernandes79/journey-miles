@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -61,6 +62,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName(value = "createDestination: Should return http 201 when information´s are valid")
+    @WithMockUser
     void createDestination_scenario_1() throws Exception {
         //Arrange
         Destination destination = new Destination();
@@ -87,6 +89,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName(value = "createDestination: Should return http 400 when information´s are invalids")
+    @WithMockUser
     void createDestination_scenario_2() throws Exception {
         //Act
         var result = mvc.perform(post("/destinations"))
@@ -96,6 +99,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("listAllDestination: Should return  http 200 when information´s are valid")
+    @WithMockUser
     void listAllDestination_scenario_1() throws Exception {
         //Arrange
         Pageable pageable = PageRequest.of(0, 6, Sort.by("name"));
@@ -126,6 +130,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("listAllDestination: Should return  http 404 when destinations list are empty")
+    @WithMockUser
     void listAllDestination_scenario_2() throws Exception {
         //Arrange
         Pageable pageable = PageRequest.of(0, 6, Sort.by("name"));
@@ -148,6 +153,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName(value = "findDestinationById: Should return http 200 when information´s are valid")
+    @WithMockUser
     void findDestinationById_scenario_1() throws Exception {
         //Arrange
         Long id = 1L;
@@ -172,6 +178,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName(value = "findDestinationById: Should return http 400 when id is invalid")
+    @WithMockUser
     void findDestinationById_scenario_2() throws Exception {
         //Arrange
         Long id = null;
@@ -186,6 +193,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("findDestinationByName: Should return http 200 when information´s are valid")
+    @WithMockUser
     void findDestinationByName_scenario_1() throws Exception {
         //Arrange
         String name = "Paris";
@@ -216,6 +224,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("findDestinationByName: Should return http 200 when information´s are valid")
+    @WithMockUser
     void findDestinationByName_scenario_2() throws Exception {
         //Arrange
         String name = "Paris";
@@ -237,6 +246,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("updateDestination: Should return http 200 when information´s are valid")
+    @WithMockUser
     void updateDestination_scenario_1() throws Exception {
         //Arrange
         Long id = 1L;
@@ -271,6 +281,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("updateDestination: Should return http 400 when information´s are invalid")
+    @WithMockUser
     void updateDestination_scenario_2() throws Exception {
         //Arrange
         Long id = 1L;
@@ -284,6 +295,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("updateDestination: Should return http 404 when id is invalid")
+    @WithMockUser
     void updateDestination_scenario_3() throws Exception {
         //Arrange
         Long id = null;
@@ -297,6 +309,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("deleteDestination: Should return http 404 when destination not found")
+    @WithMockUser
     void deleteDestination_scenario_01() throws Exception {
         //Arrange
         Long id = null;
@@ -312,6 +325,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("deleteDestination: Should return http 200 when information´s are valid")
+    @WithMockUser
     void deleteDestination_scenario_02() throws Exception {
         //Arrange
         Long id = 1L;

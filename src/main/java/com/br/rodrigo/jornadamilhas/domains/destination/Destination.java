@@ -1,13 +1,9 @@
 package com.br.rodrigo.jornadamilhas.domains.destination;
 
-import com.br.rodrigo.jornadamilhas.domains.client.Client;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "destinations")
@@ -24,11 +20,9 @@ public class Destination {
     private String photo2;
     private String name;
     private String metaDescription;
+    @Column(columnDefinition = "TEXT")
     private String textDescription;
     private BigDecimal price;
-    @ManyToMany(mappedBy = "destinations")
-    @JsonIgnore
-    private List<Client> clients = new ArrayList<>();
 
     public Destination(DestinationDataInput dataInput) {
         this.photo = dataInput.photo();

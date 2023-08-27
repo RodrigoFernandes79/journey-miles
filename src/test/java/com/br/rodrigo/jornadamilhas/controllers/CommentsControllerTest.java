@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("registerComment: Should return http 400 when information's are invalids")
+    @WithMockUser
     void registerComment_scenario_1() throws Exception {
         var response = mvc.perform(post("/comments"))
                 .andReturn().getResponse();
@@ -60,6 +62,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("registerComment: Should return http 201 when information's are valid")
+    @WithMockUser
     void registerComment_scenario_2() throws Exception {
         // Arrange
         Long clientId = 1L;
@@ -93,6 +96,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("listAllComments: Should return http 200 when information's are valid")
+    @WithMockUser
     void listAllComments_scenario_2() throws Exception {
         //Arrange
         Pageable pageable = PageRequest.of(0, 6, Sort.by("username"));
@@ -126,6 +130,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("listAllComments: Should return http 404 when commentary not found")
+    @WithMockUser
     void listAllComments_scenario_1() throws Exception {
         Pageable pageable = PageRequest.of(0, 6, Sort.by("username"));
         //Arrange
@@ -147,6 +152,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("findCommentByIdClient: Should return http 200 when information's are valid")
+    @WithMockUser
     void findCommentByIdClient_scenario_1() throws Exception {
         // Arrange
         Long id_client = 1L;
@@ -180,6 +186,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("findCommentByIdClient: Should return http 404 when client not found")
+    @WithMockUser
     void findCommentByIdClient_scenario_2() throws Exception {
         // Arrange
         Long id_client = null;
@@ -200,6 +207,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("updateComment: Should return http 200 ok when information's are valid ")
+    @WithMockUser
     void updateComment_scenario_1() throws Exception {
         //Arrange
         Long client_id = 1L;
@@ -232,6 +240,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("updateComment: Should return http 400 when information's are invalid ")
+    @WithMockUser
     void updateComment_scenario_2() throws Exception {
         //Arrange
         Long client_id = 1L;
@@ -246,6 +255,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("deleteComment: Should return http 200 when information´s are valid")
+    @WithMockUser
     void deleteComment_scenario_1() throws Exception {
         //Asserts
         Long comment_id = 1L;
@@ -271,6 +281,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("deleteComment: Should return http 404 when comment not found")
+    @WithMockUser
     void deleteComment_scenario_2() throws Exception {
         //Asserts
         Long comment_id = null;

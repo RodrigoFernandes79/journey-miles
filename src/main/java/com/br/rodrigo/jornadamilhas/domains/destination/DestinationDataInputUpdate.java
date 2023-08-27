@@ -1,8 +1,11 @@
 package com.br.rodrigo.jornadamilhas.domains.destination;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
 

@@ -31,11 +31,6 @@ public class Client {
     private List<Comment> comments = new ArrayList<>();
     @Embedded
     private Address address;
-    @ManyToMany()
-    @JoinTable(name = "clients-destinations",
-            joinColumns = {@JoinColumn(name = "client_id")},
-            inverseJoinColumns = {@JoinColumn(name = "destination_id")})
-    private List<Destination> destinations = new ArrayList<>();
 
     public Client(ClientDataInput dataInput) {
         this.username = dataInput.username();

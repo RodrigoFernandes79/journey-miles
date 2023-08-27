@@ -4,11 +4,15 @@ import com.br.rodrigo.jornadamilhas.domains.client.Client;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInput;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInputUpdate;
 import com.br.rodrigo.jornadamilhas.domains.client.ListClientDataOutput;
+import com.br.rodrigo.jornadamilhas.domains.user.User;
 import com.br.rodrigo.jornadamilhas.exceptions.DataNotFoundException;
 import com.br.rodrigo.jornadamilhas.exceptions.ExistingDataException;
 import com.br.rodrigo.jornadamilhas.exceptions.PasswordNotEqualsException;
 import com.br.rodrigo.jornadamilhas.repositories.ClientRepository;
+import com.br.rodrigo.jornadamilhas.repositories.CommentRepository;
+import com.br.rodrigo.jornadamilhas.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +21,14 @@ import java.util.List;
 public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public Client createClient(ClientDataInput clientDataInput) throws PasswordNotEqualsException {
+    public Client createClient(ClientDataInput clientDataInput) {
         var verifyClient = clientRepository.findByEmail(clientDataInput.email());
         var verifyCpf = clientRepository.findByCpf(clientDataInput.cpf());
         if (verifyClient.isPresent() || verifyCpf.isPresent()) {
@@ -27,7 +37,15 @@ public class ClientService {
         if (!clientDataInput.password().equals(clientDataInput.repeatPassword())) {
             throw new PasswordNotEqualsException("Passwords must be equals!");
         }
-        var client = clientRepository.save(new Client(clientDataInput));
+        var client = new Client(clientDataInput);
+        var generateCryptPassword = passwordEncoder.encode(client.getPassword());
+        client.setPassword(generateCryptPassword);
+        clientRepository.save(client);
+
+        User user = new User(clientDataInput);
+        user.setPassword(generateCryptPassword);
+        userRepository.save(user);
+
         return client;
     }
 
@@ -60,7 +78,9 @@ public class ClientService {
         var verifyClient = clientRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Client doesnt exists"));
         clientRepository.delete(verifyClient);
-    }
+        var user = userRepository.findByEmail(verifyClient.getEmail());
+        userRepository.delete((User) user);
 
+    }
 
 }

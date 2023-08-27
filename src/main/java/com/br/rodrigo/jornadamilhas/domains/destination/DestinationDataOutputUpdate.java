@@ -1,5 +1,7 @@
 package com.br.rodrigo.jornadamilhas.domains.destination;
 
+import org.w3c.dom.Text;
+
 import java.math.BigDecimal;
 
 public record DestinationDataOutputUpdate(
