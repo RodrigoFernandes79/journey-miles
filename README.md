@@ -25,4 +25,21 @@ Project proposed by Alura in the Challenge Backend 7th Edition.
 - `🐋Docker`
 
 ## 🚀Functionalities:
+### 👤Client
+
+- `Register`: Save Customer through a POST /clients with the information in a JSON in the body of the request.
+
+- `Update`: Update Client through a PATCH /clients/{ID}, where ID is the Client identifier, the new Client data must be sent in the body of the request.
+     * Only the Client user can update their data. 
+     * The client must be authenticated.
+
+- `Search by id`: Search Client by ID through a GET /clients/{ID}, where {ID} is the Client identifier.
+     * The client must be authenticated.
+
+- `Search all`: Search for Clients through a GET /clients.
+     * Only admins must be authorized.
+
+- `Delete`: Delete Client through DELETE /clients/{ID}, where {ID} is the Client's identifier.
+    * Only the Client user can delete their data. 
+    * The client must be authenticated. 
 
