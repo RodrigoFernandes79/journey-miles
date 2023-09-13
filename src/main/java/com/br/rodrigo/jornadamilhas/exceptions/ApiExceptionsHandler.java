@@ -39,5 +39,10 @@ public class ApiExceptionsHandler {
             this(error.getField(), error.getDefaultMessage());
         }
     }
+    @ExceptionHandler(ValidException.class)
+    public ResponseEntity handleErrorValidationsBusinessRule(ValidException ex) {
+
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 
 }
