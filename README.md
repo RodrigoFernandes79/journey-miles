@@ -41,5 +41,33 @@ Project proposed by Alura in the Challenge Backend 7th Edition.
 
 - `Delete`: Delete Client through DELETE /clients/{ID}, where {ID} is the Client's identifier.
     * Only the Client user can delete their data. 
-    * The client must be authenticated. 
+    * The client must be authenticated.
+      
+### 👤Comment
+
+- `Register`: Save Comment through a POST /comments with the information in a JSON in the body of the request.
+      * Only the Client user can post a new comment. 
+      * The client must be authenticated
+
+- `Update`: Update Comment through a PATCH /comments/{ID}, where ID is the Comment identifier, the new Comment data must be sent in the body of the request.
+     * Only the Client user can update their data. 
+     * The client must be authenticated.
+
+- `Search by id`: Search all comments by ID through a GET /comments/{ID}, where {ID} is the Client identifier.
+     * The client must be authenticated.
+     * Shows a paginated list containing all the customer's comments
+
+- `Search all`: Search for Comments through a GET /comments.
+     * Only admins must be authorized.
+     * displays a paginated list of all comments
+
+- `Delete`: Delete Comment through DELETE /comments/{ID}, where {ID} is the comment's identifier.
+    * Only the Client user can delete their data. 
+    * The client must be authenticated.
+      
+- `Show random comments`: Search for 3 random  comments through a GET /comments-home.
+     * The client must be authenticated.
+       
+
+
 
