@@ -46,8 +46,8 @@ Project proposed by Alura in the Challenge Backend 7th Edition.
 ### 🔊Comment
 
 - `Register`: Save Comment through a POST /comments with the information in a JSON in the body of the request.
-      * Only the Client user can post a new comment. 
-      * The client must be authenticated
+     * Only the Client user can post a new comment. 
+     * The client must be authenticated
 
 - `Update`: Update Comment through a PATCH /comments/{ID}, where ID is the Comment identifier, the new Comment data must be sent in the body of the request.
      * Only the Client user can update their data. 
@@ -58,11 +58,11 @@ Project proposed by Alura in the Challenge Backend 7th Edition.
      * Shows a paginated list containing all the customer's comments
 
 - `Search all`: Search for Comments through a GET /comments.
-     * displays a paginated list of all comments
+     * Displays a paginated list of all comments
 
 - `Delete`: Delete Comment through DELETE /comments/{ID}, where {ID} is the comment's identifier.
-    * Only the Client user can delete their data. 
-    * The client must be authenticated.
+     * Only the Client user can delete their data. 
+     * The client must be authenticated.
       
 - `Show random comments`: Search for 3 random  comments through a GET /comments-home.
 
