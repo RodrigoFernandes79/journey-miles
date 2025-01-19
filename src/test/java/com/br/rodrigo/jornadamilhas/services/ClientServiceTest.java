@@ -3,6 +3,8 @@ package com.br.rodrigo.jornadamilhas.services;
 import com.br.rodrigo.jornadamilhas.domains.client.Client;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInput;
 import com.br.rodrigo.jornadamilhas.domains.user.User;
+import com.br.rodrigo.jornadamilhas.exceptions.ExistingDataException;
+import com.br.rodrigo.jornadamilhas.exceptions.PasswordNotEqualsException;
 import com.br.rodrigo.jornadamilhas.repositories.ClientRepository;
 import com.br.rodrigo.jornadamilhas.repositories.CommentRepository;
 import com.br.rodrigo.jornadamilhas.repositories.UserRepository;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -39,6 +42,8 @@ class ClientServiceTest {
     private ArgumentCaptor<Client> clientArgumentCaptor;
     @Mock
     private ClientDataInput clientDataInput;
+    @Mock
+    private Client client;
 
     @Test
     @DisplayName("Should Return a client when validate pass")
@@ -54,9 +59,35 @@ class ClientServiceTest {
         clientService.createClient(clientDataInput);
         //Assertion / then
         then(clientRepository).should().save(clientArgumentCaptor.capture());
-        assertEquals(encodedPassword,clientArgumentCaptor.getValue().getPassword());
+        assertEquals(encodedPassword, clientArgumentCaptor.getValue().getPassword());
         verify(userRepository).save(new User(clientDataInput));
-        
+
+
+    }
+
+    @Test
+    @DisplayName("Should Return exception when email or cpf exists")
+    void createClient_scenario01() {
+        //Arrange / Given
+        given(clientRepository.findByEmail(clientDataInput.email())).willReturn(Optional.of(client));
+        given(clientRepository.findByCpf(clientDataInput.cpf())).willReturn(Optional.of(client));
+        //Act / when && Assertion / then
+        assertThrows(ExistingDataException.class, () -> clientService.createClient(clientDataInput));
+
+    }
+
+    @Test
+    @DisplayName("Should Return exception when password is different than repeat password")
+    void createClient_scenario02() {
+        //Arrange / Given
+        given(clientRepository.findByEmail(clientDataInput.email())).willReturn(Optional.empty());
+        given(clientRepository.findByCpf(clientDataInput.cpf())).willReturn(Optional.empty());
+        var password = "any password";
+        var wrongPassword = "other password";
+        given(clientDataInput.password()).willReturn(password);
+        given(clientDataInput.repeatPassword()).willReturn(wrongPassword);
+        //Act / when && Assertion / then
+        assertThrows(PasswordNotEqualsException.class, () -> clientService.createClient(clientDataInput));
 
     }
 }
