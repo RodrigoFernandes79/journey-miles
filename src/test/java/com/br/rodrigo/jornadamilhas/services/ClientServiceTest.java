@@ -1,7 +1,9 @@
 package com.br.rodrigo.jornadamilhas.services;
 
+import com.br.rodrigo.jornadamilhas.domains.address.Address;
 import com.br.rodrigo.jornadamilhas.domains.client.Client;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInput;
+import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInputUpdate;
 import com.br.rodrigo.jornadamilhas.domains.client.ListClientDataOutput;
 import com.br.rodrigo.jornadamilhas.domains.user.User;
 import com.br.rodrigo.jornadamilhas.exceptions.DataNotFoundException;
@@ -10,7 +12,6 @@ import com.br.rodrigo.jornadamilhas.exceptions.PasswordNotEqualsException;
 import com.br.rodrigo.jornadamilhas.repositories.ClientRepository;
 import com.br.rodrigo.jornadamilhas.repositories.CommentRepository;
 import com.br.rodrigo.jornadamilhas.repositories.UserRepository;
-import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -51,6 +51,10 @@ class ClientServiceTest {
     private ClientDataInput clientDataInput;
     @Mock
     private Client client;
+    @Mock
+    private Address address;
+    @Captor
+    private ArgumentCaptor<ClientDataInputUpdate> clientDataInputUpdateArgumentCaptor;
 
 
     @Test
@@ -126,5 +130,32 @@ class ClientServiceTest {
 
         //Act / when && Assertion / then
         assertThrows(DataNotFoundException.class, () -> clientService.listAllClients());
+    }
+
+    @Test
+    @DisplayName("Should return updated objects when validate passes")
+    void updateClient_scenario01() {
+        //Arrange /Given
+        Long id = 1L;
+        given(clientRepository.findById(id)).willReturn(Optional.of(client));
+        //Act / When
+        clientService.updateClient(id, new ClientDataInputUpdate("95455945049", "newphoto.jpg", null));
+        //Arrange /Then
+        then(client).should().dataUpdateClient(clientDataInputUpdateArgumentCaptor.capture());
+        assertEquals("95455945049", clientDataInputUpdateArgumentCaptor.getValue().phoneNumber());
+        assertEquals("newphoto.jpg", clientDataInputUpdateArgumentCaptor.getValue().photo());
+        assertNull(clientDataInputUpdateArgumentCaptor.getValue().dataAddress());
+    }
+
+    @Test
+    @DisplayName("Should return exception  when validate not passes")
+    void updateClient_scenario02() {
+        //Arrange /Given
+        Long id = 1L;
+        given(clientRepository.findById(id)).willReturn(Optional.empty());
+        //Act / When && Arrange /Then
+        assertThrows(DataNotFoundException.class, () -> clientService.updateClient(id,
+                new ClientDataInputUpdate("95455945049", "newphoto.jpg", null)));
+
     }
 }
