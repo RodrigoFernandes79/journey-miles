@@ -104,9 +104,9 @@ class DestinationControllerTest {
         //Arrange
         Pageable pageable = PageRequest.of(0, 6, Sort.by("name"));
         var destination1 = new Destination(1L, null, null, "Paris", null,
-                null, BigDecimal.valueOf(500.00), null);
+                null, BigDecimal.valueOf(500.00));
         var destination2 = new Destination(2L, null, null,
-                "Paraguay", null, null, BigDecimal.valueOf(350.00), null);
+                "Paraguay", null, null, BigDecimal.valueOf(350.00));
         List<Destination> destinationList = Arrays.asList(destination1, destination2);
         Page<Destination> destinationPage = new PageImpl<>(destinationList);
         when(destinationRepository.findAll(pageable))
