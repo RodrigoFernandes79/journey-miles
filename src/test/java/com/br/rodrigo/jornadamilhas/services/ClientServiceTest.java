@@ -1,6 +1,5 @@
 package com.br.rodrigo.jornadamilhas.services;
 
-import com.br.rodrigo.jornadamilhas.domains.address.Address;
 import com.br.rodrigo.jornadamilhas.domains.client.Client;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInput;
 import com.br.rodrigo.jornadamilhas.domains.client.ClientDataInputUpdate;
@@ -51,8 +50,6 @@ class ClientServiceTest {
     private ClientDataInput clientDataInput;
     @Mock
     private Client client;
-    @Mock
-    private Address address;
     @Captor
     private ArgumentCaptor<ClientDataInputUpdate> clientDataInputUpdateArgumentCaptor;
 
@@ -156,6 +153,31 @@ class ClientServiceTest {
         //Act / When && Arrange /Then
         assertThrows(DataNotFoundException.class, () -> clientService.updateClient(id,
                 new ClientDataInputUpdate("95455945049", "newphoto.jpg", null)));
+
+    }
+
+    @Test
+    @DisplayName("Should return Object Client  when validate pass")
+    void findClientById_scenario01() {
+        //Arrange / Given
+        Long id = 1L;
+        given(clientRepository.findById(id)).willReturn(Optional.of(client));
+        //Act / When
+        Client response = clientService.findClientById(id);
+        //Arrange / Then
+        assertEquals(client.getPhoneNumber(), response.getPhoneNumber());
+        assertNotNull(response);
+        assertEquals(client.getCpf(), response.getCpf());
+    }
+
+    @Test
+    @DisplayName("Should return exception  when validate  not pass")
+    void findClientById_scenario02() {
+        //Arrange / Given
+        Long id = 1L;
+        given(clientRepository.findById(id)).willReturn(Optional.empty());
+        //Act / When && Arrange / Then
+        assertThrows(DataNotFoundException.class, () -> clientService.findClientById(id));
 
     }
 }
