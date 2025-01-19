@@ -199,9 +199,9 @@ class DestinationControllerTest {
         String name = "Paris";
         Pageable pageable = PageRequest.of(0, 6, Sort.by("price"));
         var destination1 = new Destination(1L, null,
-                "Paris", null, null, null, BigDecimal.valueOf(500.00), null);
+                "Paris", null, null, null, BigDecimal.valueOf(500.00));
         var destination2 = new Destination(2L, null,
-                "Paraguay", null, null, null, BigDecimal.valueOf(350.00), null);
+                "Paraguay", null, null, null, BigDecimal.valueOf(350.00));
         List<Destination> destinationList = Arrays.asList(destination1, destination2);
         Page<Destination> destinationPage = new PageImpl<>(destinationList, pageable, 2L);
         when(destinationRepository.findAllByNameIgnoreCaseContaining(name, pageable))
