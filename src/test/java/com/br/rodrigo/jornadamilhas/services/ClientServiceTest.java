@@ -9,7 +9,6 @@ import com.br.rodrigo.jornadamilhas.exceptions.DataNotFoundException;
 import com.br.rodrigo.jornadamilhas.exceptions.ExistingDataException;
 import com.br.rodrigo.jornadamilhas.exceptions.PasswordNotEqualsException;
 import com.br.rodrigo.jornadamilhas.repositories.ClientRepository;
-import com.br.rodrigo.jornadamilhas.repositories.CommentRepository;
 import com.br.rodrigo.jornadamilhas.repositories.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
@@ -38,8 +37,6 @@ class ClientServiceTest {
     private ClientRepository clientRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private CommentRepository commentRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks
@@ -52,6 +49,8 @@ class ClientServiceTest {
     private Client client;
     @Captor
     private ArgumentCaptor<ClientDataInputUpdate> clientDataInputUpdateArgumentCaptor;
+    @Mock
+    private User user;
 
 
     @Test
@@ -180,4 +179,24 @@ class ClientServiceTest {
         assertThrows(DataNotFoundException.class, () -> clientService.findClientById(id));
 
     }
+
+    @Test
+    @DisplayName("Should delete client when validate pass")
+    void deleteClientById_scenario01() {
+        //Arrange / Given
+        Long id = 1L;
+        given(clientRepository.findById(id)).willReturn(Optional.of(client));
+        given(userRepository.findByEmail(client.getEmail())).willReturn(user);
+        //Act / When
+        clientService.deleteClientById(id);
+        //Assertion / Then
+        then(clientRepository).should().delete(client);
+        verify(clientRepository, times(1)).delete(client);
+        then(userRepository).should().delete(user);
+        verify(userRepository, times(1)).delete(user);
+        verify(client, never()).getUsername();
+        verify(user, never()).getPassword();
+
+    }
+
 }
