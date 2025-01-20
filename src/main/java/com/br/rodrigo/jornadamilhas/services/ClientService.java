@@ -52,7 +52,7 @@ public class ClientService {
     public List<ListClientDataOutput> listAllClients() {
         List<Client> clients = clientRepository.findAll();
         if (clients.isEmpty()) {
-            new DataNotFoundException("No client found");
+            throw new DataNotFoundException("No client found");
         }
         List<ListClientDataOutput> clientsOutput = clients
                 .stream().map(ListClientDataOutput::new).toList();
