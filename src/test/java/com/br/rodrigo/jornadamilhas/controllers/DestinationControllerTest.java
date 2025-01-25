@@ -62,7 +62,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName(value = "createDestination: Should return http 201 when information´s are valid")
-    @WithMockUser
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     void createDestination_scenario_1() throws Exception {
         //Arrange
         Destination destination = new Destination();
@@ -246,7 +246,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("updateDestination: Should return http 200 when information´s are valid")
-    @WithMockUser
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     void updateDestination_scenario_1() throws Exception {
         //Arrange
         Long id = 1L;
@@ -325,7 +325,7 @@ class DestinationControllerTest {
 
     @Test
     @DisplayName("deleteDestination: Should return http 200 when information´s are valid")
-    @WithMockUser
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     void deleteDestination_scenario_02() throws Exception {
         //Arrange
         Long id = 1L;
