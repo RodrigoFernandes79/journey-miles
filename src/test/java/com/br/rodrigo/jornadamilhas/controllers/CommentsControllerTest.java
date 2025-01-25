@@ -152,7 +152,7 @@ class CommentsControllerTest {
 
     @Test
     @DisplayName("findCommentByIdClient: Should return http 200 when information's are valid")
-    @WithMockUser
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     void findCommentByIdClient_scenario_1() throws Exception {
         // Arrange
         Long id_client = 1L;
