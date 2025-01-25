@@ -66,6 +66,7 @@ public class FlightService {
         var registerFlights = flightReservationRepository.findAllByFlight(flight);
         for (FlightReservation reservation : registerFlights) {
             reservation.setFlightDate(flightUpdateDateTime.departureTime());
+            flightReservationRepository.save(reservation);
         }
         return flight;
     }
