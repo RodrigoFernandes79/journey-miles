@@ -37,6 +37,8 @@ public class SecurityConfiguration {
                     req.requestMatchers(antMatcher(HttpMethod.POST, "/login")).permitAll();
                     req.requestMatchers(antMatcher(HttpMethod.GET,"/destinations/**")).permitAll();
                     req.requestMatchers(antMatcher(HttpMethod.GET,"/comments-home")).permitAll();
+                    req.requestMatchers(antMatcher("/swagger-ui/**")).permitAll();
+                    req.requestMatchers(antMatcher( "/v3/api-docs/**")).permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
