@@ -3,10 +3,12 @@ package com.br.rodrigo.jornadamilhas.repositories;
 import com.br.rodrigo.jornadamilhas.domains.address.Address;
 import com.br.rodrigo.jornadamilhas.domains.client.Client;
 import com.br.rodrigo.jornadamilhas.domains.comments.Comment;
+import com.br.rodrigo.jornadamilhas.integrationTests.testContainer.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,10 @@ import org.springframework.data.domain.Sort;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-class CommentRepositoryTest {
+/* Garante que o banco de dados configurado no  Testcontainers seja usado nos testes do repository,
+sem substituição automática por um banco em memória (como H2). */
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class CommentRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -36,7 +41,7 @@ class CommentRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deve retornar comentarios pelo id do cliente")
+    @DisplayName("Should return a page list comment when find by id client")
     void findCommentByClientId() {
         //arrange / Given
         clientRepository.save(client);

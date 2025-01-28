@@ -1,10 +1,12 @@
 package com.br.rodrigo.jornadamilhas.repositories;
 
 import com.br.rodrigo.jornadamilhas.domains.destination.Destination;
+import com.br.rodrigo.jornadamilhas.integrationTests.testContainer.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +20,10 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-class DestinationRepositoryTest {
+/* Garante que o banco de dados configurado no  Testcontainers seja usado nos testes do repository,
+sem substituição automática por um banco em memória (como H2). */
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class DestinationRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private DestinationRepository destinationRepository;
     private Destination destination;
