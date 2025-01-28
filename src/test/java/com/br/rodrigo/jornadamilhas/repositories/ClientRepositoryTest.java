@@ -2,10 +2,12 @@ package com.br.rodrigo.jornadamilhas.repositories;
 
 import com.br.rodrigo.jornadamilhas.domains.address.Address;
 import com.br.rodrigo.jornadamilhas.domains.client.Client;
+import com.br.rodrigo.jornadamilhas.integrationTests.testContainer.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
@@ -14,7 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-class ClientRepositoryTest {
+/* Garante que o banco de dados configurado no  Testcontainers seja usado nos testes do repository,
+sem substituição automática por um banco em memória (como H2). */
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class ClientRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     private ClientRepository clientRepository;
 
@@ -31,7 +36,7 @@ class ClientRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deve Retornar um objeto ao buscar por email")
+    @DisplayName("Should return object Client when find by email")
     void findByEmail() {
         //Arrange / given
         clientRepository.save(client);
@@ -43,7 +48,7 @@ class ClientRepositoryTest {
     }
 
     @Test
-    @DisplayName("Deve Retornar um objeto ao buscar por cpf")
+    @DisplayName("Should return a client object when find by cpf")
     void findByCpf() {
         //Arrange / given
         clientRepository.save(client);
